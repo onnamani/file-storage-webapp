@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     private AuthenticationService authenticationService;
 
     public SecurityConfig (AuthenticationService authenticationService) {
@@ -34,5 +35,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin()
                 .defaultSuccessUrl("/home", true);
     }
-
 }
