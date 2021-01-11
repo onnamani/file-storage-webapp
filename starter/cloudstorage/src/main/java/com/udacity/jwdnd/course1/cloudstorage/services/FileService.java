@@ -22,6 +22,8 @@ public class FileService {
         return this.fileMapper.getFiles(userId);
     }
 
+    public FileModel getFile(Integer fileId) { return this.fileMapper.getFile(fileId); }
+
     public boolean isFileNameAvailable(String fileName, Integer userId) {
         List<FileModel> userFiles = fileMapper.getFiles(userId);
         if (userFiles.size() == 0) return true;

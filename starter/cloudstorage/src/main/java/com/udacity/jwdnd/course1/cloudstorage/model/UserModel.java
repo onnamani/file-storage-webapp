@@ -1,5 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.model;
 
+import java.util.List;
+
 public class UserModel {
     private Integer userId;
     private String username;
@@ -7,6 +9,8 @@ public class UserModel {
     private String password;
     private String firstname;
     private String lastname;
+
+    private List<FileModel> userFiles;
 
     public UserModel(
             Integer userId,
@@ -41,4 +45,8 @@ public class UserModel {
 
     public String getLastname() { return lastname; }
     public void setLastname(String lastname) { this.lastname = lastname; }
+
+    public List<FileModel> getUserFiles() { return this.userFiles; }
+
+    public void addUserFile(FileModel file) { this.userFiles.add(file); }
 }

@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controllers;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.FileModel;
 import com.udacity.jwdnd.course1.cloudstorage.model.UserModel;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
@@ -44,6 +45,12 @@ public class FileController {
                     redirectAttributes.addFlashAttribute("fileUploadError", true);
                     return "redirect:/result";
                 }
+
+                FileModel fileModel = new FileModel();
+
+                fileModel.setFileId(fileId);
+                fileModel.setFilename(fileUpload.getOriginalFilename());
+                user.addUserFile(fileModel);
 
                 redirectAttributes.addFlashAttribute("success", true);
                 return "redirect:/result";
