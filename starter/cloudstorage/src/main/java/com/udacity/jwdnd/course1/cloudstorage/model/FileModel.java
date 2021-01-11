@@ -5,7 +5,7 @@ public class FileModel {
     private Integer fileId;
     private String filename;
     private String contentType;
-    private String fileSize;
+    private Long fileSize;
     private Integer userId;
     private byte[] filePayload;
 
@@ -18,8 +18,8 @@ public class FileModel {
     public String getContentType() { return this.contentType; }
     public void setContentType(String contentType) { this.contentType = contentType;}
 
-    public String getFileSize() { return this.fileSize; }
-    public void setFileSize(String fileSize) { this.fileSize = fileSize; }
+    public Long getFileSize() { return this.fileSize; }
+    public void setFileSize(Long fileSize) { this.fileSize = fileSize; }
 
     public Integer getUserId() { return this.userId; }
     public void setUserId(Integer userId) { this.userId = userId; }
