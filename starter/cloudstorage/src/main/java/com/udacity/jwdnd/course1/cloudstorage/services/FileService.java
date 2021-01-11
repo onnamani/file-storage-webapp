@@ -1,13 +1,14 @@
 package com.udacity.jwdnd.course1.cloudstorage.services;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
-import com.udacity.jwdnd.course1.cloudstorage.model.FileModel;
+import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.util.List;
 
 @Service
@@ -18,14 +19,14 @@ public class FileService {
 
     public FileService(FileMapper fileMapper) { this.fileMapper = fileMapper; }
 
-    public List<FileModel> getFiles(Integer userId) {
+    public List<File> getFiles(Integer userId) {
         return this.fileMapper.getFiles(userId);
     }
 
-    public FileModel getFile(Integer fileId) { return this.fileMapper.getFile(fileId); }
+    public File getFile(Integer fileId) { return this.fileMapper.getFile(fileId); }
 
     public boolean isFileNameAvailable(String fileName, Integer userId) {
-        List<FileModel> userFiles = fileMapper.getFiles(userId);
+        List<File> userFiles = fileMapper.getFiles(userId);
         if (userFiles.size() == 0) return true;
         else{
             return !userFiles.contains(fileName);
@@ -35,15 +36,15 @@ public class FileService {
     public Integer insertFile(MultipartFile multipartFile, Integer userId) throws IOException {
         InputStream inputStream = multipartFile.getInputStream();
 
-        FileModel fileModel = new FileModel();
+        File file = new File();
 
-        fileModel.setFilename(multipartFile.getOriginalFilename());
-        fileModel.setContentType(multipartFile.getContentType());
-        fileModel.setFileSize(multipartFile.getSize());
-        fileModel.setUserId(userId);
-        fileModel.setFilePayload(multipartFile.getBytes());
+        file.setFilename(multipartFile.getOriginalFilename());
+        file.setContentType(multipartFile.getContentType());
+        file.setFileSize(multipartFile.getSize());
+        file.setUserId(userId);
+        file.setFilePayload(multipartFile.getBytes());
 
-        return fileMapper.insertFile(fileModel);
+        return fileMapper.insertFile(file);
 
     }
 }

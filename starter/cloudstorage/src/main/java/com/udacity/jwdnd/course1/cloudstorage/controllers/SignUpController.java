@@ -1,6 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controllers;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.UserModel;
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +16,11 @@ public class SignUpController {
     public SignUpController(UserService userService) { this.userService = userService; }
 
     @RequestMapping(value = "signup", method = RequestMethod.GET)
-    public String signUpGet(@ModelAttribute("userObject")UserModel userObject) { return "signup"; }
+    public String signUpGet(@ModelAttribute("userObject") User userObject) { return "signup"; }
 
     @RequestMapping(value = "signup", method = RequestMethod.POST)
     public String signUpPost(
-            @ModelAttribute("userObject") UserModel userObject,
+            @ModelAttribute("userObject") User userObject,
             Model model,
             RedirectAttributes redirectAttributes) {
 
