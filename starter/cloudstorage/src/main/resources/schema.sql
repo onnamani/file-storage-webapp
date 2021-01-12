@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS NOTES (
 
 CREATE TABLE IF NOT EXISTS FILES (
     fileId INT PRIMARY KEY auto_increment,
-    fileName VARCHAR,
+    filename VARCHAR,
     contentType VARCHAR,
     fileSize VARCHAR,
     userId INT,

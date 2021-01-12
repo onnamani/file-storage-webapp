@@ -2,49 +2,54 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
+import com.udacity.jwdnd.course1.cloudstorage.storage.StorageService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
-
 import java.util.List;
 
 @Service
-@Transactional
-public class FileService {
+public class FileService implements StorageService {
 
-    private FileMapper fileMapper;
+    private final FileMapper fileMapper;
 
     public FileService(FileMapper fileMapper) { this.fileMapper = fileMapper; }
 
-    public List<File> getFiles(Integer userId) {
-        return this.fileMapper.getFiles(userId);
-    }
 
-    public File getFile(Integer fileId) { return this.fileMapper.getFile(fileId); }
-
-    public boolean isFileNameAvailable(String fileName, Integer userId) {
-        List<File> userFiles = fileMapper.getFiles(userId);
-        if (userFiles.size() == 0) return true;
-        else{
-            return !userFiles.contains(fileName);
-        }
-    }
-
-    public Integer insertFile(MultipartFile multipartFile, Integer userId) throws IOException {
-        InputStream inputStream = multipartFile.getInputStream();
-
+    @Override
+    public Integer store(MultipartFile multipartFile, Integer userId) throws IOException {
         File file = new File();
-
         file.setFilename(multipartFile.getOriginalFilename());
         file.setContentType(multipartFile.getContentType());
-        file.setFileSize(multipartFile.getSize());
+        file.setFileSize(String.valueOf(multipartFile.getSize()));
         file.setUserId(userId);
         file.setFilePayload(multipartFile.getBytes());
 
-        return fileMapper.insertFile(file);
+        return this.fileMapper.insertFile(file);
+    }
 
+    @Override
+    public File getFileByName(String filename) {
+        return this.fileMapper.getFileByName(filename);
+    }
+
+    @Override
+    public List<File> getUserFileNames(Integer userId) {
+        return this.fileMapper.getFileName(userId);
+    }
+
+    @Override
+    public File getFileById(Integer fileId) {
+        return this.fileMapper.getFileById(fileId);
+    }
+
+    @Override
+    public Integer deleteFile(Integer fileId) {
+        return this.fileMapper.deleteFile(fileId);
+    }
+
+    public boolean isFileNameAvailable(String filename) {
+        return getFileByName(filename) == null;
     }
 }

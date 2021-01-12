@@ -6,9 +6,9 @@ public class File {
     private Integer fileId;
     private String filename;
     private String contentType;
-    private Long fileSize;
+    private String fileSize;
     private Integer userId;
-    private byte[] filePayload;
+    private byte[] fileData;
 
     public Integer getFileId() { return this.fileId; }
     public void setFileId(Integer fileId) { this.fileId = fileId; }
@@ -19,12 +19,12 @@ public class File {
     public String getContentType() { return this.contentType; }
     public void setContentType(String contentType) { this.contentType = contentType;}
 
-    public Long getFileSize() { return this.fileSize; }
-    public void setFileSize(Long fileSize) { this.fileSize = fileSize; }
+    public String getFileSize() { return this.fileSize; }
+    public void setFileSize(String fileSize) { this.fileSize = fileSize; }
 
     public Integer getUserId() { return this.userId; }
     public void setUserId(Integer userId) { this.userId = userId; }
 
-    public byte[] getFilePayload() { return this.filePayload; }
-    public void setFilePayload(byte[] filePayload) { this.filePayload = filePayload; }
+    public byte[] getFilePayload() { return this.fileData; }
+    public void setFilePayload(byte[] fileData) { this.fileData = fileData; }
 }

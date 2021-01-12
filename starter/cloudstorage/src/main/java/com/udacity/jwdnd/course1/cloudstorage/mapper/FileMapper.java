@@ -2,20 +2,25 @@ package com.udacity.jwdnd.course1.cloudstorage.mapper;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Mapper
+@Component
 public interface FileMapper {
 
-    @Select("SELECT fileId, fileName FROM FILES WHERE userId = #{userId}")
-    List<File> getFiles(Integer userId);
+    @Select("SELECT fileId, filename, contentType FROM FILES WHERE userId = #{userId}")
+    List<File> getFileName(Integer userId);
 
     @Select("SELECT * FROM FILES WHERE fileId = #{fileId}")
-    File getFile(Integer fileId);
+    File getFileById(Integer fileId);
 
-    @Insert("INSERT INTO FILES (fileName, contentType, fileSize, userId, filePayload) " +
-            "VALUES(#{fileName}, #{contentType}, #{fileSize}, #{userId}, #{filePayload})")
+    @Select("SELECT * FROM FILES WHERE filename = #{filename}")
+    File getFileByName(String filename);
+
+    @Insert("INSERT INTO FILES (filename, contentType, fileSize, userId, fileData) " +
+            "VALUES(#{filename}, #{contentType}, #{fileSize}, #{userId}, #{fileData})")
     @Options(useGeneratedKeys = true, keyProperty = "fileId")
     Integer insertFile(File file);
 

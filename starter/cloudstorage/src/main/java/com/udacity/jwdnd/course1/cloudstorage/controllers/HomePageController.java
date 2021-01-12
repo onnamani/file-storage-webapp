@@ -4,7 +4,6 @@ import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,15 +16,19 @@ import java.util.List;
 @RequestMapping("/home")
 public class HomePageController {
 
-    @Autowired
-    private FileService fileService;
-    @Autowired
-    private UserService userService;
+    private final FileService fileService;
+    private final UserService userService;
 
-    @GetMapping
-    public String homePageGet(Authentication authentication, Model model) {
+    public HomePageController(FileService fileService, UserService userService) {
+        this.fileService = fileService;
+        this.userService = userService;
+    }
+
+
+    @GetMapping()
+    public String homePageGet(Model model, Authentication authentication) {
         User user = this.userService.getUser(authentication.getName());
-        List<File> userFiles = fileService.getFiles(user.getUserId());
+        List<File> userFiles = fileService.getUserFileNames(user.getUserId());
 
         model.addAttribute("userFiles", userFiles);
 
