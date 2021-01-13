@@ -100,8 +100,10 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
+<!--                                    Note Input Window start-->
                                     <div class="modal-body">
-                                        <form action="#" method="POST">
+                                        <form action="#" method="POST"
+                                              th:action="@{/home/note/{userId}(userId=${??})}">
                                             <input type="hidden" name="noteId" id="note-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Title</label>
@@ -114,6 +116,7 @@
                                             <button id="noteSubmit" type="submit" class="d-none"></button>
                                         </form>
                                     </div>
+<!--                                    Note Input Window end-->
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         <button type="button" class="btn btn-primary" onclick="$('#noteSubmit').click();">Save changes</button>
