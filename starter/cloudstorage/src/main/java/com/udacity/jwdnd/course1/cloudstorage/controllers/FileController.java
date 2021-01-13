@@ -75,6 +75,7 @@ public class FileController {
                 }
 
                 model.addAttribute("success", true);
+                model.addAttribute("hrefValue", "/home");
                 return "result";
 
             } catch (Exception e) {
