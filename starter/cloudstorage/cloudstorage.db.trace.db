@@ -1,4 +1,0 @@
-2021-01-13 17:36:54 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO NOTES (notetitle, notedescription, userid) VALUES (?, ?, {userid})[*]" [42000-200]
-2021-01-13 17:47:17 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO NOTES (notetitle, notedescription, userid) VALUES (?, ?, {userid})[*]" [42000-200]

@@ -27,18 +27,24 @@ public class NoteController {
             Model model,
             Authentication authentication) {
 
-        User user = userService.getUser(authentication.getName());
-        noteObject.setUserid(user.getUserId());
+        Integer noteId;
 
-        Integer noteId = noteService.saveUserNote(noteObject);
+        if (noteObject.getNoteid() == null) {
+            User user = userService.getUser(authentication.getName());
+            noteId = noteService.saveUserNote(noteObject, user);
+
+        } else {
+            noteId = noteService.updateUserNote(noteObject);
+        }
 
         if (noteId == null) {
-            model.addAttribute("fileError", "Ooops, something went wrong. Tray again!");
+            model.addAttribute("fileError", "Ooops, something went wrong. Try again!");
             return "result";
         }
 
         model.addAttribute("success", true);
         model.addAttribute("hrefValue", "/home?nav=notes");
         return "result";
+
     }
 }
