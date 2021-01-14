@@ -87,7 +87,8 @@
                                                     '${userNote.noteid}',
                                                     '${userNote.notetitle}',
                                                     '${userNote.notedescription}')|">Edit</button>
-                                            <a class="btn btn-danger">Delete</a>
+                                            <a class="btn btn-danger"
+                                               th:href="@{/home/note/{noteid}(noteid = ${userNote.noteid})}">Delete</a>
                                         </td>
                                         <th scope="row" th:text="${userNote.notetitle}">Example Note Title</th>
                                         <td th:text="${userNote.notedescription}">Example Note Description </td>
