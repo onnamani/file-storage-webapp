@@ -43,8 +43,10 @@ public class NoteController {
         }
 
         model.addAttribute("success", true);
-        model.addAttribute("hrefValue", "/home?nav=notes");
         return "result";
 
     }
+
+    @ModelAttribute("hrefValue")
+    public String hrefValue() { return "/home?nav=notes"; }
 }

@@ -16,12 +16,12 @@
             </div>
             <div class="alert alert-danger fill-parent" th:if="${uploadError}">
                 <h1 class="display-5">Error</h1>
-                <span>Your changes were not saved. Click <a href="/home">here</a> to continue.</span>
+                <span>Your changes were not saved. Click <a th:href="@{${hrefValue}}">here</a> to continue.</span>
             </div>
             <div class="alert alert-danger fill-parent" th:if="${fileError} != null">
                 <h1 class="display-5">Error</h1>
                 <span th:text="${fileError}">Example Error Message</span>
-                <span>Click <a href="/home">here</a> to continue.</span>
+                <span>Click <a th:href="@{${hrefValue}}">here</a> to continue.</span>
             </div>
         </div>
     </body>
