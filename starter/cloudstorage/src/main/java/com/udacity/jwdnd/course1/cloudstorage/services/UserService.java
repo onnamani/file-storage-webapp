@@ -26,14 +26,11 @@ public class UserService {
         String encodedSalt = Base64.getEncoder().encodeToString(salt);
         String hashedPassword = hashService.getHashedValue(user.getPassword(), encodedSalt);
 
-        user.setSalt(encodedSalt);
-        user.setPassword(hashedPassword);
-
         return userMapper.insertUser(new User(
                 null,
                 user.getUsername(),
-                user.getSalt(),
-                user.getPassword(),
+                encodedSalt,
+                hashedPassword,
                 user.getFirstname(),
                 user.getLastname()
         ));

@@ -26,6 +26,8 @@ public class SignUpController {
 
         Integer userId = 0;
 
+        System.out.println(userObject.getFirstname() + " " + userObject.getLastname());
+
         if (userService.isUsernameAvailable(userObject.getUsername())) {
             userId = userService.createUser(userObject);
         } else {
