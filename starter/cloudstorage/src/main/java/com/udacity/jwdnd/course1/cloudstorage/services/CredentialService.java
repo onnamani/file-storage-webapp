@@ -21,7 +21,13 @@ public class CredentialService {
     }
 
     public List<Credential> getUserCredentials(Integer userId) {
-        return this.credentialMapper.getCredentials(userId);
+        List<Credential> credentials = this.credentialMapper.getCredentials(userId);
+
+        for (Credential credential: credentials) {
+            credential.setDecryptedPassword(decryptPassword(credential.getPassword(), credential.getKey()));
+        }
+
+        return credentials;
     }
 
     public Integer deleteUserCredential(Integer credentialId) {
@@ -45,7 +51,7 @@ public class CredentialService {
         String[] secureKeyAndPassword = getSecureKeyAndPassword(credential);
 
         return credentialMapper.updateCredential(new Credential(
-                credential.getCredentialId(),
+                credential.getCredentialid(),
                 credential.getUrl(),
                 credential.getUsername(),
                 secureKeyAndPassword[0],
@@ -62,5 +68,9 @@ public class CredentialService {
         String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), encodedKey);
 
         return new String[] {encodedKey, encryptedPassword};
+    }
+
+    public String decryptPassword(String encryptedPassword, String encodedKey) {
+       return encryptionService.decryptValue(encryptedPassword, encodedKey);
     }
 }

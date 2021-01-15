@@ -20,7 +20,7 @@
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link" th:classappend="${addFileClass} ? 'active show' : ''" id="nav-files-tab" data-toggle="tab" href="#nav-files" role="tab" aria-controls="nav-files" th:attr="aria-selected=${addFileClass}? 'true' : 'false'">Files</a>
                         <a class="nav-item nav-link" th:classappend="${addNavClass} ? 'active show' : ''" id="nav-notes-tab" data-toggle="tab" href="#nav-notes" role="tab" aria-controls="nav-notes" th:attr="aria-selected=${addNavClass}? 'true' : 'false'">Notes</a>
-                        <a class="nav-item nav-link" id="nav-credentials-tab" data-toggle="tab" href="#nav-credentials" role="tab" aria-controls="nav-credentials" aria-selected="false">Credentials</a>
+                        <a class="nav-item nav-link" th:classappend="${addCredentialClass} ? 'active show' : ''" id="nav-credentials-tab" data-toggle="tab" href="#nav-credentials" role="tab" aria-controls="nav-credentials" th:attr="aria-selected=${addCredentialClass}? 'true' : 'false'">Credentials</a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
@@ -140,7 +140,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
+<!--                    Credential navbar-->
+                    <div class="tab-pane fade" th:classappend="${addCredentialClass} ? 'active show' : ''" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
                         <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showCredentialModal()">
                             + Add a New Credential
                         </button>
@@ -156,14 +157,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="userCredential: ${userCredentials}">
                                     <td>
                                         <button type="button" class="btn btn-success">Edit</button>
                                         <a class="btn btn-danger">Delete</a>
                                     </td>
-                                    <th scope="row">Example Credential URL</th>
-                                    <td>Example Credential Username</td>
-                                    <td>Example Credential Password</td>
+                                    <th scope="row" th:text="${userCredential.url}">Example Credential URL</th>
+                                    <td th:text="${userCredential.username}">Example Credential Username</td>
+                                    <td th:text="${userCredential.password}">Example Credential Password</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -179,19 +180,37 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" method="POST">
-                                            <input type="hidden" name="credentialId" id="credential-id">
+<!--                                        Credential modal Input-->
+                                        <form action="#" method="POST"
+                                                th:action="@{home/credential}"
+                                                th:object="${credentialObject}">
+                                            <input type="hidden" name="credentialId" id="credential-id"
+                                                    th:field="*{credentialid}">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">URL</label>
-                                                <input type="text" name= "url" class="form-control" id="credential-url" maxlength="100" required>
+                                                <input type="text"
+                                                       name= "url"
+                                                       class="form-control"
+                                                       id="credential-url" maxlength="100" required autofocus
+                                                        th:field="*{url}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Username</label>
-                                                <input type="text" name= "username" class="form-control" id="credential-username" maxlength="30" required>
+                                                <input type="text"
+                                                       name= "username"
+                                                       class="form-control"
+                                                       id="credential-username"
+                                                       maxlength="30" required
+                                                        th:field="*{username}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Password</label>
-                                                <input type="text" name= "password" class="form-control" id="credential-password" maxlength="30" required>
+                                                <input type="text"
+                                                       name= "password"
+                                                       class="form-control"
+                                                       id="credential-password"
+                                                       maxlength="30" required
+                                                        th:field="*{password}">
                                             </div>
                                             <button id="credentialSubmit" type="submit" class="d-none"></button>
                                         </form>
