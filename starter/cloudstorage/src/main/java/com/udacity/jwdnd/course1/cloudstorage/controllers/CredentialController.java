@@ -28,7 +28,7 @@ public class CredentialController {
             Model model) {
         Integer credentialId;
 
-        if (credentialObject.getCredentialid() == null) {
+        if (credentialObject.getCredentialId() == null) {
             User user = userService.getUser(authentication.getName());
             credentialId = credentialService.saveUserCredential(credentialObject, user);
         } else {

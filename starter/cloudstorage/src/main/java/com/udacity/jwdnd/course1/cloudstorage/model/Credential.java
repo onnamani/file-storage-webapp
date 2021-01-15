@@ -24,8 +24,8 @@ public class Credential {
         this.userid = userid;
     }
 
-    public Integer getCredentialid() { return this.credentialid; }
-    public void setCredentialid(Integer credentialid) { this.credentialid = credentialid; }
+    public Integer getCredentialId() { return this.credentialid; }
+    public void setCredentialId(Integer credentialid) { this.credentialid = credentialid; }
 
     public String getUrl() { return this.url; }
     public void setUrl(String url) { this.url = url; }
