@@ -30,6 +30,10 @@ public class CredentialService {
         return credentials;
     }
 
+    public Credential getUserCredential(Integer credentialId) {
+        return this.credentialMapper.getCredential(credentialId);
+    }
+
     public Integer deleteUserCredential(Integer credentialId) {
         return this.credentialMapper.deleteCredential(credentialId);
     }
@@ -48,16 +52,15 @@ public class CredentialService {
     }
 
     public Integer updateUserCredential(Credential credential) {
-        String[] secureKeyAndPassword = getSecureKeyAndPassword(credential);
+        Credential credentialToUpdate = getUserCredential(credential.getCredentialid());
+        String encryptEditedPassword = encryptionService.encryptValue(credential.getPassword(),
+                                                                        credentialToUpdate.getKey());
 
-        return credentialMapper.updateCredential(new Credential(
-                credential.getCredentialid(),
-                credential.getUrl(),
-                credential.getUsername(),
-                secureKeyAndPassword[0],
-                secureKeyAndPassword[1],
-                credential.getUserid()
-        ));
+        credentialToUpdate.setUrl(credential.getUrl());
+        credentialToUpdate.setUsername(credential.getUsername());
+        credentialToUpdate.setPassword(encryptEditedPassword);
+
+        return credentialMapper.updateCredential(credentialToUpdate);
     }
 
     public String[] getSecureKeyAndPassword (Credential credential) {

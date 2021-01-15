@@ -8,7 +8,7 @@ public class Credential {
     private String password;
     private Integer userid;
 
-    private String decryptedPassword;
+    private String decryptedPassword = "";
 
     public Credential(
             Integer credentialid,

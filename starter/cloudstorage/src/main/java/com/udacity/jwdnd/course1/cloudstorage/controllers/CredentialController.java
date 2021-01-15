@@ -26,16 +26,16 @@ public class CredentialController {
             @ModelAttribute("credentialObject") Credential credentialObject,
             Authentication authentication,
             Model model) {
-        Integer credentialId;
+        Integer returnedRowCount;
 
         if (credentialObject.getCredentialid() == null) {
             User user = userService.getUser(authentication.getName());
-            credentialId = credentialService.saveUserCredential(credentialObject, user);
+            returnedRowCount = credentialService.saveUserCredential(credentialObject, user);
         } else {
-            credentialId = credentialService.updateUserCredential(credentialObject);
+            returnedRowCount = credentialService.updateUserCredential(credentialObject);
         }
 
-        if (credentialId == null) {
+        if (returnedRowCount < 1) {
             model.addAttribute("fileError", "Ooops, something went wrong. Try again!");
             return "result";
         }
