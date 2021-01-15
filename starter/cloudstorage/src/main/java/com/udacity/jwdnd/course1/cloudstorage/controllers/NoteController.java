@@ -27,7 +27,7 @@ public class NoteController {
     public String deleteUserNote(@PathVariable("noteid") Integer noteId, Model model) {
         Integer deleteNote = noteService.deleteUserNote(noteId);
 
-        if (deleteNote == null) {
+        if (deleteNote < 1) {
             model.addAttribute("fileError", "Note delete failed!! Try again.");
             return "result";
         }
