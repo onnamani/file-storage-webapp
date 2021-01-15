@@ -16,6 +16,11 @@ public interface CredentialMapper {
     @Options(useGeneratedKeys = true, keyProperty = "credentialid")
     Integer saveCredential(Credential credential);
 
+    @Update("UPDATE CREDENTIALS " +
+            "SET url=#{url}, username=#{username}, password={password} " +
+            "WHERE credentialid = #{credentialid}")
+    Integer updateCredential(Credential credential);
+
     @Delete("DELETE * FROM CREDENTIALS WHERE credentialid = #{credentialid}")
     Integer deleteCredential(Integer credentialid);
 }
