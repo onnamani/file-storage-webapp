@@ -19,6 +19,9 @@ public class Login {
     @FindBy(id = "signupSuccess")
     private WebElement signUpSuccess;
 
+    @FindBy(id = "clickToSignUp")
+    private WebElement clickToSignUp;
+
     public Login(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -40,5 +43,7 @@ public class Login {
     public WebElement getPassword() { return this.password; }
 
     public WebElement getLoginSubmit() { return this.loginSubmit; }
+
+    public WebElement getClickToSignUp() { return this.clickToSignUp; }
 
 }

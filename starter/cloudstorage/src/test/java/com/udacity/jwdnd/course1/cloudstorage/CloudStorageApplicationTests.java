@@ -11,20 +11,21 @@ import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class CloudStorageApplicationTests {
 
 	@LocalServerPort
 	private int port;
-
-	@Autowired
-	private UserService userService;
 
 	private SignUp signUp;
 	private Login login;
@@ -39,13 +40,13 @@ class CloudStorageApplicationTests {
 	}
 
 	@BeforeEach
-	public void beforeEach() {
-
+	public void beforeEach() throws InterruptedException {
 		this.driver = new ChromeDriver();
 		signUp = new SignUp(driver);
 		login = new Login(driver);
 		result = new Result(driver);
 		home = new Home(driver);
+
 	}
 
 	@AfterEach
@@ -72,28 +73,55 @@ class CloudStorageApplicationTests {
 	public void userSignUpActions() throws InterruptedException {
 		driver.get("http://localhost:" + this.port + "/signup");
 
-		if (!userService.isUsernameAvailable("jsmith")) {
-			userService.deleteUser("jsmith");
-		}
-
 		signUp.submitSignUp("John", "Smith", "jsmith", "12345");
 
 		assertEquals("Login", driver.getTitle());
 		assertEquals("You've signed up successfully. Please login to continue",
 								login.getSignUpSuccess().getText());
 
+		Thread.sleep(5000);
 		login.loginUser("jsmith", "12345");
 		assertEquals("Home", driver.getTitle());
 
+		Thread.sleep(5000);
 		home.logoutUser();
-		unauthorizedUserRestrictions();
+		
+		driver.get("http://localhost:" + this.port + "/home");
+		assertEquals("Login", driver.getTitle());
 
-		try {
-			Thread.sleep(3000);
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
-		}
+	}
 
+	@Test
+	public void createNote() throws InterruptedException {
+
+		driver.get("http://localhost:" + this.port);
+
+		login.getClickToSignUp().click();
+		signUp.submitSignUp("John", "Smith", "jsmith", "12345");
+
+		Thread.sleep(5000);
+		login.loginUser("jsmith", "12345");
+
+		Thread.sleep(5000);
+		home.getNoteTab().click();
+		home.userCreatesNote("Today's Task",
+				"1. Take the morning exercise. \n2. Walk the dog. \n3. Take the trash out.");
+
+		Thread.sleep(5000);
+		assertEquals("Success", result.getSuccessFlash().getText());
+		assertEquals("Result", driver.getTitle());
+
+
+		result.getSuccessContinue().click();
+
+		Thread.sleep(10000);
+		assertEquals("Notes", home.getActiveNavBars().get(0).getText());
+		assertEquals(home.getNavContentDiv(), home.getActiveNavBars().get(1));
+
+		assertEquals("Today's Task", home.getNoteTitle().getText());
+
+		assertEquals("1. Take the morning exercise. 2. Walk the dog. 3. Take the trash out.",
+				home.getNoteDescription().getText());
 	}
 
 }

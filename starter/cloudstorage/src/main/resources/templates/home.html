@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" th:classappend="${addNavClass} ? 'active show' : ''" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
-                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
+                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" id="addNote" onclick="showNoteModal()">
                             + Add a New Note
                         </button>
 
@@ -90,8 +90,8 @@
                                             <a class="btn btn-danger"
                                                th:href="@{/home/note/{noteid}(noteid = ${userNote.noteid})}">Delete</a>
                                         </td>
-                                        <th scope="row" th:text="${userNote.notetitle}">Example Note Title</th>
-                                        <td th:text="${userNote.notedescription}">Example Note Description </td>
+                                        <th scope="row" th:text="${userNote.notetitle}" id="noteTitle">Example Note Title</th>
+                                        <td th:text="${userNote.notedescription}" id="noteDescription">Example Note Description </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -134,7 +134,8 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="$('#noteSubmit').click();">Save changes</button>
+                                        <button type="button" class="btn btn-primary"
+                                                onclick="$('#noteSubmit').click();" id="noteModalSave">Save changes</button>
                                     </div>
                                 </div>
                             </div>
