@@ -83,11 +83,13 @@
                                         <td>
                                             <button type="button"
                                                     class="btn btn-success"
-                                                    id="noteEdit"
-                                                    th:attr="onclick=|showNoteModal(
-                                                    '${userNote.noteid}',
-                                                    '${userNote.notetitle}',
-                                                    '${userNote.notedescription}')|">Edit</button>
+                                                    th:data-noteId="${userNote.noteid}"
+                                                    th:data-noteTitle="${userNote.notetitle}"
+                                                    th:data-noteDescription="${userNote.notedescription}"
+                                                    onclick="showNoteModal(
+                                                    this.getAttribute('data-noteId'),
+                                                    this.getAttribute('data-noteTitle'),
+                                                    this.getAttribute('data-noteDescription'))">Edit</button>
                                             <a class="btn btn-danger"
                                                th:href="@{/home/note/{noteid}(noteid = ${userNote.noteid})}">Delete</a>
                                         </td>

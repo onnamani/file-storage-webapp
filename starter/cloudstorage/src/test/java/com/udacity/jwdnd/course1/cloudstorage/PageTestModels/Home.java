@@ -39,8 +39,11 @@ public class Home {
     @FindBy(className = "active")
     private List<WebElement> activeNavBars;
 
-    @FindBy(id = "noteEdit")
-    private WebElement noteEdit;
+    @FindBy(className = "btn-success")
+    private List<WebElement> editButtons;
+
+    @FindBy(className = "btn-danger")
+    private List<WebElement> deleteButtons;
 
     public Home(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -62,7 +65,7 @@ public class Home {
     }
 
     public void userEditNote(String titleInput, String descriptionInput) {
-        this.noteEdit.click();
+        this.editButtons.get(0).click();
 
         this.noteModalTitle.clear();
         this.noteModalDescription.clear();
@@ -81,7 +84,7 @@ public class Home {
 
     public WebElement getNoteTitle() { return this.noteTitle; }
 
-    public WebElement getNoteEdit() { return this.noteEdit; }
-
     public WebElement getNoteDescription() { return this.noteDescription; }
+
+    public List<WebElement> getDeleteButtons() { return this.deleteButtons; }
 }

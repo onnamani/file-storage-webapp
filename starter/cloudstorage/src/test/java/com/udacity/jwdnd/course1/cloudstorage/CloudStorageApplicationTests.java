@@ -150,13 +150,43 @@ class CloudStorageApplicationTests {
 		assertEquals("Success", result.getSuccessFlash().getText());
 		assertEquals("Result", driver.getTitle());
 
+//		Thread.sleep(5000);
+//		result.getSuccessContinue().click();
+//
+//		Thread.sleep(5000);
+//		assertEquals("Today's Task!!!", home.getNoteTitle().getText());
+//		assertEquals("1. Take the morning exercise. 2. Walk the dog. 3. Make breakfast.",
+//				home.getNoteDescription().getText());
+	}
+
+	@Test
+	public void deleteNote() throws InterruptedException {
+		driver.get("http://localhost:" + this.port);
+
+		login.getClickToSignUp().click();
+		signUp.submitSignUp("John", "Smith", "jsmith", "12345");
+
+		Thread.sleep(5000);
+		login.loginUser("jsmith", "12345");
+
+		Thread.sleep(5000);
+		home.getNoteTab().click();
+		home.userCreatesNote("Today's Task",
+				"1. Take the morning exercise. \n2. Walk the dog. \n3. Take the trash out.");
+
 		Thread.sleep(5000);
 		result.getSuccessContinue().click();
 
 		Thread.sleep(5000);
-		assertEquals("Today's Task!!!", home.getNoteTitle().getText());
-		assertEquals("1. Take the morning exercise. 2. Walk the dog. 3. Make breakfast.",
-				home.getNoteDescription().getText());
+		home.getDeleteButtons().get(0).click();
+
+		assertEquals("Success", result.getSuccessFlash().getText());
+
+		Thread.sleep(5000);
+		result.getSuccessContinue().click();
+
+		Thread.sleep(5000);
+		assertEquals(0, home.getDeleteButtons().size());
 	}
 
 }
