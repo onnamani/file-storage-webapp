@@ -5,7 +5,6 @@ import com.udacity.jwdnd.course1.cloudstorage.PageTestModels.Login;
 import com.udacity.jwdnd.course1.cloudstorage.PageTestModels.Result;
 import com.udacity.jwdnd.course1.cloudstorage.PageTestModels.SignUp;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
@@ -225,6 +224,81 @@ class CloudStorageApplicationTests {
 		assertEquals(encryptionService.encryptValue("password", key),
 							home.getCredentialPasswords().get(0).getText());
 
+	}
+
+	@Test
+	public void userEditCredential() throws InterruptedException {
+
+		Thread.sleep(5000);
+		login.loginUser("jsmith", "12345");
+
+		Thread.sleep(5000);
+		home.getCredentialTab().click();
+		home.userCreatesCredential(
+				"www.gmail.com",
+				"smithJ",
+				"password"
+		);
+
+		Thread.sleep(5000);
+		result.getSuccessContinue().click();
+
+		Thread.sleep(5000);
+		home.getEditButtons().get(0).click();
+
+		Thread.sleep(5000);
+		assertEquals("password", home.getCredentialModalPassword().getAttribute("value"));
+		home.userEditCredential(
+				"www.yahoomail.com",
+				"josmith",
+				"password12345"
+		);
+
+		Thread.sleep(5000);
+		result.getSuccessContinue().click();
+
+		Thread.sleep(5000);
+
+		assertEquals("www.yahoomail.com", home.getCredentialUrls().get(0).getText());
+		assertEquals("josmith", home.getCredentialUsernames().get(0).getText());
+
+		List<Credential> userCredentials = credentialService.getUserCredentials(
+				userService.getUser("jsmith").getUserId()
+		);
+
+		String key = userCredentials.get(0).getKey();
+
+		assertEquals(encryptionService.encryptValue("password12345", key),
+				home.getCredentialPasswords().get(0).getText());
+
+	}
+
+	@Test
+	public void userDeleteCredential() throws InterruptedException {
+		Thread.sleep(5000);
+		login.loginUser("jsmith", "12345");
+
+		Thread.sleep(5000);
+		home.getCredentialTab().click();
+		home.userCreatesCredential(
+				"www.gmail.com",
+				"smithJ",
+				"password"
+		);
+
+		Thread.sleep(5000);
+		result.getSuccessContinue().click();
+
+		Thread.sleep(5000);
+		home.getDeleteButtons().get(0).click();
+
+		assertEquals("Success", result.getSuccessFlash().getText());
+		assertEquals("Result", driver.getTitle());
+
+		Thread.sleep(3000);
+		result.getSuccessContinue().click();
+
+		assertEquals(0, home.getCredentialUrls().size());
 	}
 
 	public void createUserHelper() {

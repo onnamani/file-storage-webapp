@@ -83,25 +83,25 @@ public class Home {
         this.logout.click();
     }
 
-    public void userCreatesNote(String titleInput, String descriptionInput) {
+    public void userCreatesNote(String title, String description) {
         this.noteTab.click();
         this.addNote.click();
 
-        this.noteModalTitle.sendKeys(titleInput);
-        this.noteModalDescription.sendKeys(descriptionInput);
+        this.noteModalTitle.sendKeys(title);
+        this.noteModalDescription.sendKeys(description);
 
         this.noteModalSave.click();
 
     }
 
-    public void userEditNote(String titleInput, String descriptionInput) {
+    public void userEditNote(String title, String description) {
         this.editButtons.get(0).click();
 
         this.noteModalTitle.clear();
         this.noteModalDescription.clear();
 
-        this.noteModalTitle.sendKeys(titleInput);
-        this.noteModalDescription.sendKeys(descriptionInput);
+        this.noteModalTitle.sendKeys(title);
+        this.noteModalDescription.sendKeys(description);
 
         this.noteModalSave.click();
     }
@@ -109,6 +109,19 @@ public class Home {
     public void userCreatesCredential(String url, String username, String password) {
         this.credentialTab.click();
         this.addCredential.click();
+
+        this.credentialModalUrl.sendKeys(url);
+        this.credentialModalUsername.sendKeys(username);
+        this.credentialModalPassword.sendKeys(password);
+
+        this.credentialModalSave.click();
+    }
+
+    public void userEditCredential(String url, String username, String password) {
+
+        this.credentialModalUrl.clear();
+        this.credentialModalUsername.clear();
+        this.credentialModalPassword.clear();
 
         this.credentialModalUrl.sendKeys(url);
         this.credentialModalUsername.sendKeys(username);
@@ -127,11 +140,15 @@ public class Home {
 
     public List<WebElement> getNoteDescriptions() { return this.noteDescriptions; }
 
+    public List<WebElement> getEditButtons() { return this.editButtons; }
+
     public List<WebElement> getDeleteButtons() { return this.deleteButtons; }
 
     public WebElement getCredentialTab() { return this.credentialTab; }
 
     public WebElement getCredentialContentDiv() { return this.credentialContentDiv; }
+
+    public WebElement getCredentialModalPassword() { return this.credentialModalPassword; }
 
     public List<WebElement> getCredentialUrls() { return this.credentialUrls; }
 
