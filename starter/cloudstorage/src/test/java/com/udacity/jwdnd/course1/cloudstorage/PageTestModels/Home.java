@@ -21,11 +21,11 @@ public class Home {
     @FindBy(id = "addNote")
     private WebElement addNote;
 
-    @FindBy(id = "noteTitle")
-    private WebElement noteTitle;
+    @FindBy(className = "noteTitle")
+    private List<WebElement> noteTitles;
 
-    @FindBy(id = "noteDescription")
-    private WebElement noteDescription;
+    @FindBy(className = "noteDescription")
+    private List<WebElement> noteDescriptions;
 
     @FindBy(id = "note-title")
     private WebElement noteModalTitle;
@@ -44,6 +44,36 @@ public class Home {
 
     @FindBy(className = "btn-danger")
     private List<WebElement> deleteButtons;
+
+    @FindBy(id = "addCredential")
+    private WebElement addCredential;
+
+    @FindBy(id = "nav-credentials-tab")
+    private WebElement credentialTab;
+
+    @FindBy(id = "nav-credentials")
+    private WebElement credentialContentDiv;
+
+    @FindBy(id = "credential-url")
+    private WebElement credentialModalUrl;
+
+    @FindBy(id = "credential-username")
+    private WebElement credentialModalUsername;
+
+    @FindBy(id = "credential-password")
+    private WebElement credentialModalPassword;
+
+    @FindBy(id = "credentialModalSave")
+    private WebElement credentialModalSave;
+
+    @FindBy(className = "credentialUrl")
+    private List<WebElement> credentialUrls;
+
+    @FindBy(className = "credentialUsername")
+    private List<WebElement> credentialUsernames;
+
+    @FindBy(className = "credentialPassword")
+    private List<WebElement> credentialPasswords;
 
     public Home(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -76,15 +106,36 @@ public class Home {
         this.noteModalSave.click();
     }
 
+    public void userCreatesCredential(String url, String username, String password) {
+        this.credentialTab.click();
+        this.addCredential.click();
+
+        this.credentialModalUrl.sendKeys(url);
+        this.credentialModalUsername.sendKeys(username);
+        this.credentialModalPassword.sendKeys(password);
+
+        this.credentialModalSave.click();
+    }
+
     public List<WebElement> getActiveNavBars() { return this.activeNavBars; }
 
     public WebElement getNoteTab() { return this.noteTab; }
 
     public WebElement getNavContentDiv() { return this.navContentDiv; }
 
-    public WebElement getNoteTitle() { return this.noteTitle; }
+    public List<WebElement> getNoteTitles() { return this.noteTitles; }
 
-    public WebElement getNoteDescription() { return this.noteDescription; }
+    public List<WebElement> getNoteDescriptions() { return this.noteDescriptions; }
 
     public List<WebElement> getDeleteButtons() { return this.deleteButtons; }
+
+    public WebElement getCredentialTab() { return this.credentialTab; }
+
+    public WebElement getCredentialContentDiv() { return this.credentialContentDiv; }
+
+    public List<WebElement> getCredentialUrls() { return this.credentialUrls; }
+
+    public List<WebElement> getCredentialUsernames() { return this.credentialUsernames; }
+
+    public List<WebElement> getCredentialPasswords() { return this.credentialPasswords; }
 }
