@@ -38,4 +38,6 @@ public class UserService {
 
     public User getUser(String username) { return userMapper.getUser(username); }
 
+    public Integer deleteUser(String username) { return userMapper.deleteUser(username); }
+
 }
