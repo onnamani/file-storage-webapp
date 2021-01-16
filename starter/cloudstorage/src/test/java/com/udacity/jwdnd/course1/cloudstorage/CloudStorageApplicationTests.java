@@ -40,13 +40,14 @@ class CloudStorageApplicationTests {
 	}
 
 	@BeforeEach
-	public void beforeEach() throws InterruptedException {
+	public void beforeEach() {
 		this.driver = new ChromeDriver();
 		signUp = new SignUp(driver);
 		login = new Login(driver);
 		result = new Result(driver);
 		home = new Home(driver);
 
+		createUserHelper();
 	}
 
 	@AfterEach
@@ -58,6 +59,7 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void unauthorizedUserRestrictions() {
+
 		driver.get("http://localhost:" + this.port + "/home");
 		assertEquals("Login", driver.getTitle());
 
@@ -71,9 +73,6 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void userSignUpActions() throws InterruptedException {
-		driver.get("http://localhost:" + this.port + "/signup");
-
-		signUp.submitSignUp("John", "Smith", "jsmith", "12345");
 
 		assertEquals("Login", driver.getTitle());
 		assertEquals("You've signed up successfully. Please login to continue",
@@ -92,12 +91,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void createNote() throws InterruptedException {
-
-		driver.get("http://localhost:" + this.port);
-
-		login.getClickToSignUp().click();
-		signUp.submitSignUp("John", "Smith", "jsmith", "12345");
+	public void userCreateNote() throws InterruptedException {
 
 		Thread.sleep(5000);
 		login.loginUser("jsmith", "12345");
@@ -126,10 +120,6 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void userEditNote() throws InterruptedException {
-		driver.get("http://localhost:" + this.port);
-
-		login.getClickToSignUp().click();
-		signUp.submitSignUp("John", "Smith", "jsmith", "12345");
 
 		Thread.sleep(5000);
 		login.loginUser("jsmith", "12345");
@@ -150,21 +140,17 @@ class CloudStorageApplicationTests {
 		assertEquals("Success", result.getSuccessFlash().getText());
 		assertEquals("Result", driver.getTitle());
 
-//		Thread.sleep(5000);
-//		result.getSuccessContinue().click();
-//
-//		Thread.sleep(5000);
-//		assertEquals("Today's Task!!!", home.getNoteTitle().getText());
-//		assertEquals("1. Take the morning exercise. 2. Walk the dog. 3. Make breakfast.",
-//				home.getNoteDescription().getText());
+		Thread.sleep(5000);
+		result.getSuccessContinue().click();
+
+		Thread.sleep(5000);
+		assertEquals("Today's Task!!!", home.getNoteTitle().getText());
+		assertEquals("1. Take the morning exercise. 2. Walk the dog. 3. Make breakfast.",
+				home.getNoteDescription().getText());
 	}
 
 	@Test
-	public void deleteNote() throws InterruptedException {
-		driver.get("http://localhost:" + this.port);
-
-		login.getClickToSignUp().click();
-		signUp.submitSignUp("John", "Smith", "jsmith", "12345");
+	public void userDeleteNote() throws InterruptedException {
 
 		Thread.sleep(5000);
 		login.loginUser("jsmith", "12345");
@@ -187,6 +173,18 @@ class CloudStorageApplicationTests {
 
 		Thread.sleep(5000);
 		assertEquals(0, home.getDeleteButtons().size());
+	}
+
+	@Test
+	public void userCreateCredential() {
+
+	}
+
+	public void createUserHelper() {
+		driver.get("http://localhost:" + this.port);
+
+		login.getClickToSignUp().click();
+		signUp.submitSignUp("John", "Smith", "jsmith", "12345");
 	}
 
 }

@@ -165,11 +165,15 @@
                                     <td>
                                         <button type="button"
                                                 class="btn btn-success"
-                                                th:attr="onclick=|showCredentialModal(
-                                                    '${userCredential.credentialid}',
-                                                    '${userCredential.url}',
-                                                    '${userCredential.username}',
-                                                    '${userCredential.decryptedPassword}')|">Edit</button>
+                                                th:data-credentialId="${userCredential.credentialid}"
+                                                th:data-credentialUrl="${userCredential.url}"
+                                                th:data-credentialUsername="${userCredential.username}"
+                                                th:data-credentialPassword="${userCredential.password}"
+                                                onclick="showCredentialModal(
+                                                    this.getAttribute('data-credentialId'),
+                                                    this.getAttribute('data-credentialUrl'),
+                                                    this.getAttribute('data-credentialUsername'),
+                                                    this.getAttribute('data-credentialPassword'))">Edit</button>
                                         <a class="btn btn-danger"
                                            th:href="@{/home/credential/{credentialid}(
                                                         credentialid = ${userCredential.credentialid})}">Delete</a>
