@@ -34,6 +34,7 @@ public class FileController {
             return "result";
         }
 
+        model.addAttribute("success", true);
         return "result";
     }
 
