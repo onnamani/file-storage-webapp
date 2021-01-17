@@ -10,15 +10,21 @@ import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -46,6 +52,7 @@ class CloudStorageApplicationTests {
 	private Home home;
 
 	private WebDriver driver;
+	private WebDriverWait wait;
 
 	@BeforeAll
 	static void beforeAll() {
@@ -55,6 +62,9 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		this.driver = new ChromeDriver();
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		wait = new WebDriverWait(driver, 5);
+
 		signUp = new SignUp(driver);
 		login = new Login(driver);
 		result = new Result(driver);
@@ -85,43 +95,47 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void userSignUpActions() throws InterruptedException {
+	public void userSignUpActions() {
 
+		wait.until(ExpectedConditions.titleIs("Login"));
 		assertEquals("Login", driver.getTitle());
 		assertEquals("You've signed up successfully. Please login to continue",
 								login.getSignUpSuccess().getText());
 
-		Thread.sleep(5000);
-		login.loginUser("jsmith", "12345");
+		loginUserHelper();
+
+		wait.until(ExpectedConditions.titleIs("Home"));
 		assertEquals("Home", driver.getTitle());
+		clickElement(home.getLogout());
 
-		Thread.sleep(5000);
-		home.logoutUser();
-
-		driver.get("http://localhost:" + this.port + "/home");
+		wait.until(ExpectedConditions.visibilityOf(login.getClickToSignUp()));
 		assertEquals("Login", driver.getTitle());
 
 	}
 
 	@Test
-	public void userCreateNote() throws InterruptedException {
+	public void userCreateNote() {
 
-		Thread.sleep(5000);
-		login.loginUser("jsmith", "12345");
+		loginUserHelper();
 
-		Thread.sleep(5000);
-		home.getNoteTab().click();
+		wait.until(ExpectedConditions.titleIs("Home"));
+		wait.until(ExpectedConditions.visibilityOfAllElements(home.getNavBar()));
+		wait.until(ExpectedConditions.elementToBeClickable(home.getNoteTab()));
+		clickElement(home.getNoteTab());
+
+		wait.until(ExpectedConditions.visibilityOf(home.getAddNote()));
 		home.userCreatesNote("Today's Task",
 				"1. Take the morning exercise. \n2. Walk the dog. \n3. Take the trash out.");
 
-		Thread.sleep(5000);
+
+		wait.until(ExpectedConditions.titleIs("Result"));
 		assertEquals("Success", result.getSuccessFlash().getText());
 		assertEquals("Result", driver.getTitle());
 
+		wait.until(ExpectedConditions.titleIs("Result"));
+		clickElement(result.getSuccessContinue());
 
-		result.getSuccessContinue().click();
-
-		Thread.sleep(10000);
+		wait.until(ExpectedConditions.titleIs("Home"));
 		assertEquals("Notes", home.getActiveNavBars().get(0).getText());
 		assertEquals(home.getNavContentDiv(), home.getActiveNavBars().get(1));
 
@@ -132,83 +146,91 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void userEditNote() throws InterruptedException {
+	public void userEditNote() {
 
-		Thread.sleep(5000);
-		login.loginUser("jsmith", "12345");
+		loginUserHelper();
 
-		Thread.sleep(5000);
-		home.getNoteTab().click();
+		wait.until(ExpectedConditions.titleIs("Home"));
+		wait.until(ExpectedConditions.visibilityOfAllElements(home.getNavBar()));
+		wait.until(ExpectedConditions.elementToBeClickable(home.getNoteTab()));
+		clickElement(home.getNoteTab());
+
+		wait.until(ExpectedConditions.visibilityOf(home.getAddNote()));
 		home.userCreatesNote("Today's Task",
 				"1. Take the morning exercise. \n2. Walk the dog. \n3. Take the trash out.");
 
-		Thread.sleep(5000);
-		result.getSuccessContinue().click();
+		wait.until(ExpectedConditions.titleIs("Result"));
+		clickElement(result.getSuccessContinue());
 
-		Thread.sleep(5000);
+		wait.until(ExpectedConditions.visibilityOfAllElements(home.getEditButtons()));
+		wait.until(ExpectedConditions.elementToBeClickable(home.getEditButtons().get(0)));
+		clickElement(home.getEditButtons().get(0));
 		home.userEditNote("Today's Task!!!",
 				"1. Take the morning exercise. \n2. Walk the dog. \n3. Make breakfast.");
 
-		Thread.sleep(5000);
+		wait.until(ExpectedConditions.titleIs("Result"));
 		assertEquals("Success", result.getSuccessFlash().getText());
 		assertEquals("Result", driver.getTitle());
 
-		Thread.sleep(5000);
-		result.getSuccessContinue().click();
+		clickElement(result.getSuccessContinue());
 
-		Thread.sleep(5000);
+		wait.until(ExpectedConditions.titleIs("Home"));
 		assertEquals("Today's Task!!!", home.getNoteTitles().get(0).getText());
 		assertEquals("1. Take the morning exercise. 2. Walk the dog. 3. Make breakfast.",
 				home.getNoteDescriptions().get(0).getText());
 	}
 
 	@Test
-	public void userDeleteNote() throws InterruptedException {
+	public void userDeleteNote() {
 
-		Thread.sleep(5000);
-		login.loginUser("jsmith", "12345");
+		loginUserHelper();
 
-		Thread.sleep(5000);
-		home.getNoteTab().click();
+		wait.until(ExpectedConditions.titleIs("Home"));
+		wait.until(ExpectedConditions.visibilityOfAllElements(home.getNavBar()));
+		wait.until(ExpectedConditions.elementToBeClickable(home.getNoteTab()));
+		clickElement(home.getNoteTab());
+
+		wait.until(ExpectedConditions.elementToBeClickable(home.getAddNote()));
 		home.userCreatesNote("Today's Task",
 				"1. Take the morning exercise. \n2. Walk the dog. \n3. Take the trash out.");
 
-		Thread.sleep(5000);
-		result.getSuccessContinue().click();
+		wait.until(ExpectedConditions.titleIs("Result"));
+		clickElement(result.getSuccessContinue());
 
-		Thread.sleep(5000);
-		home.getDeleteButtons().get(0).click();
+		wait.until(ExpectedConditions.visibilityOfAllElements(home.getDeleteButtons()));
+		clickElement(home.getDeleteButtons().get(0));
 
+		wait.until(ExpectedConditions.titleIs("Result"));
 		assertEquals("Success", result.getSuccessFlash().getText());
+		clickElement(result.getSuccessContinue());
 
-		Thread.sleep(5000);
-		result.getSuccessContinue().click();
 
-		Thread.sleep(5000);
 		assertEquals(0, home.getDeleteButtons().size());
 	}
 
 	@Test
 	public void userCreateCredential() throws InterruptedException {
 
-		Thread.sleep(5000);
-		login.loginUser("jsmith", "12345");
+		loginUserHelper();
 
-		Thread.sleep(5000);
-		home.getCredentialTab().click();
+		wait.until(ExpectedConditions.titleIs("Home"));
+		wait.until(ExpectedConditions.visibilityOfAllElements(home.getNavBar()));
+		wait.until(ExpectedConditions.elementToBeClickable(home.getCredentialTab()));
+		clickElement(home.getCredentialTab());
+
+		wait.until(ExpectedConditions.visibilityOf(home.getAddCredential()));
 		home.userCreatesCredential(
 				"www.gmail.com",
 				"smithJ",
 				"password"
 		);
 
-		Thread.sleep(5000);
+		wait.until(ExpectedConditions.titleIs("Result"));
 		assertEquals("Success", result.getSuccessFlash().getText());
 		assertEquals("Result", driver.getTitle());
+		clickElement(result.getSuccessContinue());
 
-		result.getSuccessContinue().click();
-
-		Thread.sleep(10000);
+		wait.until(ExpectedConditions.titleIs("Home"));
 		assertEquals("Credentials", home.getActiveNavBars().get(0).getText());
 		assertEquals(home.getCredentialContentDiv(), home.getActiveNavBars().get(1));
 
@@ -227,26 +249,28 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void userEditCredential() throws InterruptedException {
+	public void userEditCredential() {
 
-		Thread.sleep(5000);
-		login.loginUser("jsmith", "12345");
+		loginUserHelper();
 
-		Thread.sleep(5000);
-		home.getCredentialTab().click();
+		wait.until(ExpectedConditions.titleIs("Home"));
+		wait.until(ExpectedConditions.visibilityOfAllElements(home.getNavBar()));
+		wait.until(ExpectedConditions.elementToBeClickable(home.getCredentialTab()));
+		clickElement(home.getCredentialTab());
+
+		wait.until(ExpectedConditions.visibilityOf(home.getAddCredential()));
 		home.userCreatesCredential(
 				"www.gmail.com",
 				"smithJ",
 				"password"
 		);
 
-		Thread.sleep(5000);
-		result.getSuccessContinue().click();
+		wait.until(ExpectedConditions.titleIs("Result"));
+		clickElement(result.getSuccessContinue());
 
-		Thread.sleep(5000);
+		wait.until(ExpectedConditions.visibilityOfAllElements(home.getEditButtons()));
 		home.getEditButtons().get(0).click();
 
-		Thread.sleep(5000);
 		assertEquals("password", home.getCredentialModalPassword().getAttribute("value"));
 		home.userEditCredential(
 				"www.yahoomail.com",
@@ -254,11 +278,10 @@ class CloudStorageApplicationTests {
 				"password12345"
 		);
 
-		Thread.sleep(5000);
-		result.getSuccessContinue().click();
+		wait.until(ExpectedConditions.titleIs("Result"));
+		clickElement(result.getSuccessContinue());
 
-		Thread.sleep(5000);
-
+		wait.until(ExpectedConditions.titleIs("Home"));
 		assertEquals("www.yahoomail.com", home.getCredentialUrls().get(0).getText());
 		assertEquals("josmith", home.getCredentialUsernames().get(0).getText());
 
@@ -274,38 +297,63 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void userDeleteCredential() throws InterruptedException {
-		Thread.sleep(5000);
-		login.loginUser("jsmith", "12345");
+	public void userDeleteCredential() {
 
-		Thread.sleep(5000);
-		home.getCredentialTab().click();
+		loginUserHelper();
+
+		wait.until(ExpectedConditions.titleIs("Home"));
+		wait.until(ExpectedConditions.visibilityOfAllElements(home.getNavBar()));
+		wait.until(ExpectedConditions.elementToBeClickable(home.getCredentialTab()));
+		clickElement(home.getCredentialTab());
+
+		wait.until(ExpectedConditions.visibilityOf(home.getAddCredential()));
 		home.userCreatesCredential(
 				"www.gmail.com",
 				"smithJ",
 				"password"
 		);
 
-		Thread.sleep(5000);
-		result.getSuccessContinue().click();
+		wait.until(ExpectedConditions.titleIs("Result"));
+		clickElement(result.getSuccessContinue());
 
-		Thread.sleep(5000);
-		home.getDeleteButtons().get(0).click();
+		wait.until(ExpectedConditions.visibilityOfAllElements(home.getDeleteButtons()));
+		clickElement(home.getDeleteButtons().get(0));
 
+		wait.until(ExpectedConditions.titleIs("Result"));
 		assertEquals("Success", result.getSuccessFlash().getText());
 		assertEquals("Result", driver.getTitle());
 
-		Thread.sleep(3000);
-		result.getSuccessContinue().click();
+		clickElement(result.getSuccessContinue());
 
+		wait.until(ExpectedConditions.titleIs("Home"));
 		assertEquals(0, home.getCredentialUrls().size());
 	}
 
 	public void createUserHelper() {
 		driver.get("http://localhost:" + this.port);
+		driver.manage().window().maximize();
 
+		wait.until(ExpectedConditions.visibilityOf(login.getClickToSignUp()));
 		login.getClickToSignUp().click();
+
+		wait.until(ExpectedConditions.visibilityOfAllElements(signUp.getPageElements()));
 		signUp.submitSignUp("John", "Smith", "jsmith", "12345");
+	}
+
+	public void loginUserHelper() {
+		wait.until(ExpectedConditions.titleIs("Login"));
+		wait.until(ExpectedConditions.visibilityOfAllElements(Arrays.asList(
+				login.getUsername(),
+				login.getPassword(),
+				login.getSignUpSuccess(),
+				login.getLoginSubmit()
+		)));
+		login.loginUser("jsmith", "12345");
+	}
+
+	public void clickElement(WebElement webElement) {
+		JavascriptExecutor executor = (JavascriptExecutor) driver;
+		executor.executeScript("arguments[0].click();", webElement);
 	}
 
 }

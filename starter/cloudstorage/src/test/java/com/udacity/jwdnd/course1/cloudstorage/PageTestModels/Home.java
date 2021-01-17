@@ -9,6 +9,9 @@ import java.util.List;
 
 public class Home {
 
+    @FindBy(className = "nav-item")
+    private List<WebElement> navBar;
+
     @FindBy(id = "logout")
     private WebElement logout;
 
@@ -20,6 +23,7 @@ public class Home {
 
     @FindBy(id = "addNote")
     private WebElement addNote;
+
 
     @FindBy(className = "noteTitle")
     private List<WebElement> noteTitles;
@@ -79,13 +83,12 @@ public class Home {
         PageFactory.initElements(driver, this);
     }
 
-    public void logoutUser() {
-        this.logout.click();
-    }
 
     public void userCreatesNote(String title, String description) {
-        this.noteTab.click();
         this.addNote.click();
+
+        this.noteModalTitle.clear();
+        this.noteModalDescription.clear();
 
         this.noteModalTitle.sendKeys(title);
         this.noteModalDescription.sendKeys(description);
@@ -95,7 +98,6 @@ public class Home {
     }
 
     public void userEditNote(String title, String description) {
-        this.editButtons.get(0).click();
 
         this.noteModalTitle.clear();
         this.noteModalDescription.clear();
@@ -107,7 +109,6 @@ public class Home {
     }
 
     public void userCreatesCredential(String url, String username, String password) {
-        this.credentialTab.click();
         this.addCredential.click();
 
         this.credentialModalUrl.sendKeys(url);
@@ -130,9 +131,15 @@ public class Home {
         this.credentialModalSave.click();
     }
 
+    public List<WebElement> getNavBar() { return this.navBar; }
+
     public List<WebElement> getActiveNavBars() { return this.activeNavBars; }
 
+    public WebElement getLogout() { return this.logout; }
+
     public WebElement getNoteTab() { return this.noteTab; }
+
+    public WebElement getAddNote() { return this.addNote; }
 
     public WebElement getNavContentDiv() { return this.navContentDiv; }
 
@@ -145,6 +152,8 @@ public class Home {
     public List<WebElement> getDeleteButtons() { return this.deleteButtons; }
 
     public WebElement getCredentialTab() { return this.credentialTab; }
+
+    public WebElement getAddCredential() { return this.addCredential; }
 
     public WebElement getCredentialContentDiv() { return this.credentialContentDiv; }
 

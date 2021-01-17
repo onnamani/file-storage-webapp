@@ -24,17 +24,24 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputUsername">Username</label>
+                    <label for="inputUsername" id="labelUsername">Username</label>
                     <input type="input"
                            class="form-control"
                            name="username"
                            id="inputUsername"
                            placeholder="Enter Username"
+                           value=""
                            maxlength="20" required autofocus>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword">Password</label>
-                    <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Enter Password" maxlength="20" required>
+                    <input type="password"
+                           class="form-control"
+                           name="password"
+                           id="inputPassword"
+                           placeholder="Enter Password"
+                           value=""
+                           maxlength="20" required>
                 </div>
                 <button type="submit" class="btn btn-primary" id="loginSubmit">Login</button>
             </form>

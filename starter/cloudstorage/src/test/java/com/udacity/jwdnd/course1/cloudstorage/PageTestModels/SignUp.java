@@ -5,6 +5,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class SignUp {
 
     @FindBy(id = "inputFirstName")
@@ -48,5 +52,12 @@ public class SignUp {
         this.submit.click();
     }
 
-
+    public List<WebElement> getPageElements() {
+        List<WebElement> pageElements = Arrays.asList(this.firstName,
+                                                        this.lastName,
+                                                        this.username,
+                                                        this.password,
+                                                        this.submit);
+        return pageElements;
+    }
 }
